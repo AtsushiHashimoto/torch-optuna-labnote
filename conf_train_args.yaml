@@ -4,11 +4,11 @@ output:
   help: output directory
 gpu:
   name: -g
-  default: -1
+  default: 5
   help: set gpu device. if -1, use cpu.
 num_epochs:
   name: -E
-  default: 2
+  default: 3
   help: number of epochs
 batch_size:
   name: -B
