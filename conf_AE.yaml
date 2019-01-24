@@ -1,0 +1,32 @@
+# conv, maxpool, avgpool, upsample, trans_conv, fc
+encoder: [
+
+  ['conv', 16,3,1,1,'bn','LeakyReLU'],
+  ['avgpool',2],
+  ['conv', 8,3,1,1,'bn','LeakyReLU'],
+  ['avgpool',2],
+  ['conv', 8,3,1,1,'bn'],
+    ]
+AE_depth: 3
+
+decoder: [
+  ['conv', 8,3,1,1,'bn','LeakyReLU'],
+  ['upsample',2],
+  ['conv', 16,3,1,1,'bn','LeakyReLU'],
+  ['upsample',2],
+  ['conv', 1,3,1,1,'bn','Softplus'],
+]
+
+initialize:
+  Conv: '{}.data.normal_(0.0, 0.1)'
+  BatchNorm: [
+    '{}.data.uniform_()',
+    '{}.bias.data.zero_()'
+  ]
+
+optimizer: "torch.optim.Adam(list({}.parameters()), lr={},betas=(0.5,0.999))"
+
+losses:
+  reconstruction:
+    lambda: 1.0 # or [0.0, 1.0, 0, 50000] -> at start, 0.0, and at 50000 steps, 1.0.
+    func: torch.nn.MSELoss()

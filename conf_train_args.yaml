@@ -1,0 +1,23 @@
+output:
+  name: -o
+  default: log
+  help: output directory
+gpu:
+  name: -g
+  default: -1
+  help: set gpu device. if -1, use cpu.
+num_epochs:
+  name: -E
+  default: 2
+  help: number of epochs
+batch_size:
+  name: -B
+  default: 128
+  help: size of batch
+learning_rate:
+  name: -L
+  default: 0.001
+  help: learning rate
+seed:
+  default: 9315
+  help: set random seed manualy

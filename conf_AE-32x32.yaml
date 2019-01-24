@@ -1,0 +1,30 @@
+encoder: [
+  ['conv', 128,4,2,1,'bn','LeakyReLU'],
+  ['conv', 256,4,2,1,'bn','LeakyReLU'],
+  ['conv', 512,4,2,1,'bn','LeakyReLU'],
+  ['conv', 1024,4,2,1,'bn','LeakyReLU'],
+  ['conv', 2048,4,2,1,  ',']
+    ]
+AE_depth: 5
+
+decoder: [
+  ['trans_conv', 1024,4,2,1,'bn','LeakyReLU',True],
+  ['trans_conv', 512,4,2,1,'bn','LeakyReLU',False],
+  ['trans_conv', 256,4,2,1,'bn','LeakyReLU',False],
+  ['trans_conv', 128,4,2,1,'bn','LeakyReLU',False],
+  ['trans_conv',  3,4,2,1,  '','Softplus',False]
+]
+
+initialize:
+  Conv: '{}.data.normal_(0.0, 0.1)'
+  BatchNorm: [
+    '{}.data.uniform_()',
+    '{}.bias.data.zero_()'
+  ]
+
+optimizer: "torch.optim.Adam(list({}.parameters()), lr={},betas=(0.5,0.999))"
+
+losses:
+  reconstruction:
+    lambda: 1.0 # or [0.0, 1.0, 0, 50000] -> at start, 0.0, and at 50000 steps, 1.0.
+    func: torch.nn.MSELoss()
